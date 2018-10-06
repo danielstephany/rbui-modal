@@ -1,0 +1,28 @@
+*, 
+*::after,
+*::before 
+{
+  box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+  }
+  
+  
+  .banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ddd;
+    min-height: 500px;
+    width: 100%;
+    padding: 50px 0;
+    > article {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+  }
