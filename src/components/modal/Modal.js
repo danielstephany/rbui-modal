@@ -11,11 +11,15 @@ class Modal extends Component {
             modalOpen: false,
             modalActive: false
         }
-        // this update is used to prevent an infinate setstate loop
+        // this update is used to prevent an infinate setState loop
         this.update = true;
     }
 
     componentWillUpdate = () => {
+        this.toggleModal();
+    }
+
+    toggleModal = () => {
         if(this.update){
             if(!this.state.modalOpen){
                 this.setState(
@@ -57,24 +61,6 @@ class Modal extends Component {
                 });
             }
         }     
-    }
-
-    handleCloseModal = (e) => {
-        if(typeof e !== 'undefined'){
-            if(e.target.classList.contains("modal-container")){
-                this.setState({modalActive: false}, ()=>{
-                    setTimeout(()=>{
-                        this.setState({ modalOpen: false});
-                    },400);
-                });
-            }else {
-                this.setState({modalActive: false}, ()=>{
-                    setTimeout(()=>{
-                        this.setState({ modalOpen: false});
-                    },400);
-                });
-            }
-        } 
     }
 
     render = () => {
