@@ -11,7 +11,7 @@ class Modal extends Component {
             modalOpen: false,
             modalActive: false
         }
-        // this update is used to prevent an infinate setState loop.
+        // this update is used to prevent an infinate setState loop
         this.update = true;
     }
 
