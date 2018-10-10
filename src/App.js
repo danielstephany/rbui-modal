@@ -23,7 +23,7 @@ class App extends Component {
             <div>
                 <div className="banner">
                     <article> 
-                        <h2>Lorem ipsum dolor amet prism blue bottle.</h2>
+                        <h2>Lorem ipsum dolor prism blue bottle.</h2>
                         <p>Lorem ipsum dolor amet prism blue bottle copper mug coloring book kale chips pour-over ennui shoreditch godard. Typewriter letterpress hot chicken, waistcoat tumblr lomo cornhole. Intelligentsia activated charcoal mustache selvage fam schlitz gentrify food truck.</p>
                         <button className="modal-button" onClick={this.openModal}>View More</button>
                         <Modal 
