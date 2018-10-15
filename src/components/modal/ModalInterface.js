@@ -20,9 +20,9 @@ class ModalInterface extends Component {
         return (
         <div className='modal-container' ref={(div)=>{this.modal = div}} onClick={(e)=>{this.props.closeModal(e)}}>
             <div className="modal-interface">
-                <header>{this.props.header}</header>
-                <article>{this.props.body}</article>
-                <footer>{this.props.footer}</footer>
+                {this.props.header ? this.props.header : null}
+                {this.props.body ? this.props.body : null}   
+                {this.props.footer ? this.props.footer : null}
             </div>
         </div>
         );
