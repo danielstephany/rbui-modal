@@ -12,67 +12,55 @@ class Modal extends Component {
             modalActive: false
         }
         // this update is used to prevent an infinate setState loop.
-        this.update = true;
+        this.modalClosed = true;
     }
 
-    componentWillUpdate = () => {
-        this.toggleModal();
+    componentDidMount = () => {
+        this.toggleModal(); 
+    }
+    componentDidUpdate = () => {
+        this.toggleModal(); 
+    }
+
+    OpenModal = () => {
+        this.setState({
+                    modalOpen: true,
+                    modalActive: true
+                }, ()=>{
+                    this.modalClosed = false;
+                });
+    }
+
+    closeModal = () => {
+        this.modalClosed = true;
+        this.setState({ modalOpen: false}, ()=>{
+            setTimeout(()=>{
+                this.setState({ modalActive: false }, () => {
+                    this.props.closeModal();
+                });
+            },400);
+        });   
     }
 
     toggleModal = () => {
-        if(this.update){
-            if(!this.state.modalOpen){
-                this.setState(
-                    {
-                        modalOpen: true,
-                        modalActive: true
-                    }, ()=>{
-                        this.update = false;
-                    });
-            }else {
-                if(this.state.modalActive){
-                    this.setState({modalActive: false}, ()=>{
-                        setTimeout(()=>{
-                            this.setState({ modalOpen: false}, ()=>{
-                                this.update = false;
-                            });
-                        },400);
-                    });
-                }
-            }
-        }else {
-            this.update = true;
+        if (this.props.modalOpen && this.modalClosed) {
+            this.OpenModal();
+        } else if (!this.props.modalOpen && !this.modalClosed) {
+            this.closeModal();
         }
-    }
-
-    closeModal = (e) => {
-        if(typeof e !== 'undefined'){
-            if(e.target.classList.contains("modal-container")){
-                this.setState({modalActive: false}, ()=>{
-                    setTimeout(()=>{
-                        this.setState({ modalOpen: false});
-                    },400);
-                });
-            }else {
-                this.setState({modalActive: false}, ()=>{
-                    setTimeout(()=>{
-                        this.setState({ modalOpen: false});
-                    },400);
-                });
-            }
-        }     
     }
 
     render = () => {
         return (
             <React.Fragment>
-                {this.state.modalOpen ? 
+                {this.state.modalActive ? 
                     <ModalInterface
                         closeModal={this.closeModal} 
-                        modalActive={this.state.modalActive} 
+                        modalOpen={this.state.modalOpen} 
                         header={this.props.header} 
                         body={this.props.body} 
-                        footer={this.props.footer}/> 
+                        footer={this.props.footer}
+                        children={this.props.children}/> 
                     : 
                     undefined}
             </React.Fragment>
