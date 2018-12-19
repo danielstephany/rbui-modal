@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 class ModalInterface extends Component {
 
@@ -8,7 +9,9 @@ class ModalInterface extends Component {
                 this.modal.classList.add("active");
             },1);
         }
+        this.focusIndex = 0;
         this.trapFocus();
+        this.validateProps();
     }
 
     componentDidUpdate = () => {
@@ -23,40 +26,64 @@ class ModalInterface extends Component {
         }
     }
 
-    trapFocus = () => {
-        let focusIndex = 0;
+    getfocusList = () => {
+        return this.focusList;
+    }
 
-        this.focusList = this.modal.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
-        this.focusList[focusIndex].focus();
+   
 
-        this.modal.addEventListener("keydown", (e)=>{
-            if(e.key === "Tab" && e.shiftKey){
-                e.preventDefault();
-                focusIndex = (focusIndex > 0)? (focusIndex - 1) : (this.focusList.length - 1);
-                this.focusList[focusIndex].focus();
-            }else if (e.key === "Tab") {
-                e.preventDefault();
-                focusIndex = (focusIndex < (this.focusList.length - 1))? (focusIndex + 1) : 0;
-                this.focusList[focusIndex].focus();
-            }else if (e.key === "Escape") {
-                e.preventDefault();
+    modalKeyCtrl = (event) => {
+            if(event.key === "Tab" && event.shiftKey){
+                event.preventDefault();
+                this.focusIndex = (this.focusIndex > 0)? (this.focusIndex - 1) : (this.focusList.length - 1);
+                this.focusList[this.focusIndex].focus();
+            }else if (event.key === "Tab") {
+                event.preventDefault();
+                this.focusIndex = (this.focusIndex < (this.focusList.length - 1))? (this.focusIndex + 1) : 0;
+                this.focusList[this.focusIndex].focus();
+            }else if (event.key === "Escape") {
+                event.preventDefault();
                 this.props.closeModal();
             }
-        });
+    }
+
+    trapFocus = () => {
+        if(this.modal){
+            this.focusList = this.modal.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
+            if(this.focusList.length){
+                this.focusList[this.focusIndex].focus();
+                this.modal.addEventListener("keydown", this.modalKeyCtrl);
+            }
+        }
+    }
+
+    validateProps = () => {
+        if(this.props.children ){
+            if(this.props.header || this.props.body || this.props.footer ){
+                console.error('Warning: in Model,"props.children" should not be used with "props.header, props.body, or props.footer"');
+            }
+        }
     }
 
     render = () => {
         return (
         <div className='modal-container' ref={(div)=>{this.modal = div}} onClick={this.toggleModalContainerClose}>
             <div className="modal-interface">
-                {this.props.header ? <header>{this.props.header}</header> : undefined}
-                {this.props.body ? <article>{this.props.body}</article> : undefined}
+                {(this.props.header && !this.props.children) ? <header>{this.props.header}</header> : undefined}
+                {(this.props.body && !this.props.children) ? <article>{this.props.body}</article> : undefined}
                 {this.props.children}
-                {this.props.footer ? <footer>{this.props.footer}</footer> : undefined}
+                {(this.props.footer && !this.props.children) ? <footer>{this.props.footer}</footer> : undefined}
             </div>
         </div>
         );
     }
+}
+
+ModalInterface.propTypes = {
+    header: PropTypes.object,
+    body: PropTypes.object,
+    footer: PropTypes.object,
+    children: PropTypes.object
 }
 
 export default ModalInterface;

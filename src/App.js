@@ -31,7 +31,8 @@ class App extends Component {
                             header={<div><h3>this is a test header</h3> <button>test</button></div>}
                             body={<p>Lorem ipsum dolor amet prism <a href="#">test</a> blue bottle copper mug coloring book kale chips pour-over ennui shoreditch godard. Typewriter letterpress hot chicken, waistcoat tumblr lomo cornhole. Intelligentsia activated charcoal mustache selvage fam schlitz gentrify food truck.</p>}
                             footer={<button onClick={this.closeModal}>close</button>}
-                        />
+                        >
+                        </Modal>
                     </article>
                 </div>
             </div>
