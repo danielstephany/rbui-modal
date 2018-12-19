@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import CloseButton from './closeButton/closeButton';
 
 class ModalInterface extends Component {
 
@@ -67,12 +68,12 @@ class ModalInterface extends Component {
 
     render = () => {
         return (
-        <div className='modal-container' ref={(div)=>{this.modal = div}} onClick={this.toggleModalContainerClose}>
-            <div className="modal-interface">
-                {(this.props.header && !this.props.children) ? <header>{this.props.header}</header> : undefined}
-                {(this.props.body && !this.props.children) ? <article>{this.props.body}</article> : undefined}
+        <div className='modal-container' role="dialog" aria-modal="true" ref={(div)=>{this.modal = div}} onClick={this.toggleModalContainerClose}>
+            <div className="modal-interface" role="dialog">
+                {(this.props.header && !this.props.children) ? <header className="modal-interface__header">{this.props.header}<CloseButton closeModal={this.props.closeModal}/></header> : undefined}
+                {(this.props.body && !this.props.children) ? <div className="modal-interface__body">{this.props.body}</div> : undefined}
                 {this.props.children}
-                {(this.props.footer && !this.props.children) ? <footer>{this.props.footer}</footer> : undefined}
+                {(this.props.footer && !this.props.children) ? <footer className="modal-interface__footer">{this.props.footer}</footer> : undefined}
             </div>
         </div>
         );

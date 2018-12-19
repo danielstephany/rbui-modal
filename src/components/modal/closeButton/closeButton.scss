@@ -1,0 +1,25 @@
+.close-modal-button {
+    box-shadow: none;
+    border: none;
+    display: inline-block;
+    min-height: 30px;
+    min-width: 30px;
+    position: relative;
+    &::after,
+    &::before {
+        border-radius: 2px;
+        content: '';
+        display: block;
+        background-color: #000;
+        height: 3px;
+        width: calc(100% - 10px);
+        padding: 0;
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: rotate(45deg);
+    }
+    &::after {
+        transform: rotate(135deg);
+    }
+}
