@@ -70,7 +70,8 @@ class Modal extends Component {
 }
 
 Modal.propTypes = {
-    modalOpen: PropTypes.bool.isRequired
+    modalOpen: PropTypes.bool.isRequired,
+    toggleBtnRef: PropTypes.node.isRequired
 }
 
 export default Modal;

@@ -20,14 +20,16 @@ class App extends Component {
     }
 
     render = () => {
+        console.dir(this.modalButton);
         return(
             <div>
                 <div className="banner">
                     <article> 
                         <h2>Lorem ipsum dolor prism blue bottle.</h2>
                         <p>Lorem ipsum dolor amet prism blue bottle copper mug coloring book kale chips pour-over ennui shoreditch godard. Typewriter letterpress hot chicken, waistcoat tumblr lomo cornhole. Intelligentsia activated charcoal mustache selvage fam schlitz gentrify food truck.</p>
-                        <button className="modal-button" onClick={this.openModal} ref={(button)=>{this.modalButton = button;}}>View More</button>
+                        <button className="modal-button" id="modal-button" ref={(button)=>{this.modalButton = button;}}>View More</button>
                         <Modal 
+                            toggleBtnRef={"modal-button"}
                             closeButton={true}
                             modalOpen={this.state.modalOpen}
                             closeModal={this.closeModal}
