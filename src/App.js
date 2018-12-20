@@ -10,14 +10,14 @@ class App extends Component {
         }
     }
 
-    openModal = () => {
-        this.setState({modalOpen: true}); 
-    }
-    closeModal = () => {
-        this.setState({modalOpen: false}, ()=>{
-            this.modalButton.focus();
-        }); 
-    }
+    // openModal = () => {
+    //     this.setState({modalOpen: true}); 
+    // }
+    // closeModal = () => {
+    //     this.setState({modalOpen: false}, ()=>{
+    //         this.modalButton.focus();
+    //     }); 
+    // }
 
     render = () => {
         console.dir(this.modalButton);

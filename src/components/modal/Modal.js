@@ -17,9 +17,12 @@ class Modal extends Component {
 
     componentDidMount = () => {
         this.toggleModal(); 
+        this.modalToggleButton = document.getElementById(this.props.toggleBtnRef);
+        console.dir(this.modalToggleButton);
+        this.modalToggleButton.addEventListener('click', this.toggleModal); 
     }
     componentDidUpdate = () => {
-        this.toggleModal(); 
+        // this.toggleModal();
     }
 
     OpenModal = () => {
@@ -36,16 +39,16 @@ class Modal extends Component {
             setTimeout(()=>{
                 this.setState({ modalActive: false }, () => {
                     this.modalClosed = true;
-                    this.props.closeModal();
+                    // this.props.closeModal();
                 });
             },400);
         });   
     }
 
     toggleModal = () => {
-        if (this.props.modalOpen && this.modalClosed) {
+        if (!this.state.modalOpen && this.modalClosed) {
             this.OpenModal();
-        } else if (!this.props.modalOpen && !this.modalClosed) {
+        } else if (this.state.modalOpen && !this.modalClosed) {
             this.closeModal();
         }
     }
