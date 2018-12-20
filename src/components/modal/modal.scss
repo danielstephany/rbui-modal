@@ -23,8 +23,11 @@
         will-change: transform;
         transition: transform 0.3s ease;
         &__header {
-            padding: 15px 40px 15px 15px;
+            padding: 15px 30px 15px 15px;
             border-bottom: 1px solid #ddd;
+            h4 {
+                margin: 0;
+            }
             .close-modal-button {
                 position: absolute;
                 top: 0;
@@ -37,6 +40,7 @@
         }
         &__footer {
             padding: 15px;
+            text-align: right;
         }
         
     }

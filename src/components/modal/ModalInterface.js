@@ -7,7 +7,9 @@ class ModalInterface extends Component {
     componentDidMount(){
         if(this.props.modalOpen){
             setTimeout(()=>{
-                this.modal.classList.add("active");
+                if(this.modal){
+                    this.modal.classList.add("active");
+                }
             },1);
         }
         this.focusIndex = 0;
@@ -67,10 +69,15 @@ class ModalInterface extends Component {
     }
 
     render = () => {
+        let closeButton = undefined;
+        if(this.props.closeButton || typeof this.props.closeButton === "undefined"){
+            closeButton = <CloseButton closeModal={this.props.closeModal}/>;
+        }
+
         return (
         <div className='modal-container' role="dialog" aria-modal="true" ref={(div)=>{this.modal = div}} onClick={this.toggleModalContainerClose}>
             <div className="modal-interface" role="dialog">
-                {(this.props.header && !this.props.children) ? <header className="modal-interface__header">{this.props.header}<CloseButton closeModal={this.props.closeModal}/></header> : undefined}
+                {(this.props.header && !this.props.children) ? <header className="modal-interface__header"><h4>{this.props.header}</h4>{closeButton}</header> : undefined}
                 {(this.props.body && !this.props.children) ? <div className="modal-interface__body">{this.props.body}</div> : undefined}
                 {this.props.children}
                 {(this.props.footer && !this.props.children) ? <footer className="modal-interface__footer">{this.props.footer}</footer> : undefined}

@@ -28,9 +28,10 @@ class App extends Component {
                         <p>Lorem ipsum dolor amet prism blue bottle copper mug coloring book kale chips pour-over ennui shoreditch godard. Typewriter letterpress hot chicken, waistcoat tumblr lomo cornhole. Intelligentsia activated charcoal mustache selvage fam schlitz gentrify food truck.</p>
                         <button className="modal-button" onClick={this.openModal} ref={(button)=>{this.modalButton = button;}}>View More</button>
                         <Modal 
+                            closeButton={true}
                             modalOpen={this.state.modalOpen}
                             closeModal={this.closeModal}
-                            header={<div><h3>this is a test header</h3></div>}
+                            header={"this is a test header"}
                             body={<p>Lorem ipsum dolor amet prism <a href="#">test</a> blue bottle copper mug coloring book kale chips pour-over ennui shoreditch godard. Typewriter letterpress hot chicken, waistcoat tumblr lomo cornhole. Intelligentsia activated charcoal mustache selvage fam schlitz gentrify food truck.</p>}
                             footer={<button onClick={this.closeModal}>close</button>}
                         >

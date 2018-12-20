@@ -24,18 +24,18 @@ class Modal extends Component {
 
     OpenModal = () => {
         this.setState({
-                    modalOpen: true,
-                    modalActive: true
-                }, ()=>{
-                    this.modalClosed = false;
-                });
+            modalOpen: true,
+            modalActive: true
+        }, ()=>{
+            this.modalClosed = false;
+        });
     }
 
     closeModal = () => {
-        this.modalClosed = true;
         this.setState({ modalOpen: false}, ()=>{
             setTimeout(()=>{
                 this.setState({ modalActive: false }, () => {
+                    this.modalClosed = true;
                     this.props.closeModal();
                 });
             },400);
@@ -55,6 +55,7 @@ class Modal extends Component {
             <React.Fragment>
                 {this.state.modalActive ? 
                     <ModalInterface
+                        closeButton={this.props.closeButton}
                         closeModal={this.closeModal} 
                         modalOpen={this.state.modalOpen} 
                         header={this.props.header} 
