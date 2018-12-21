@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './modal.scss';
 import ModalInterface from './ModalInterface.js';
-import { timingSafeEqual } from 'crypto';
 
 class Modal extends Component {
 
@@ -14,11 +13,13 @@ class Modal extends Component {
         }
         // this update is used to prevent an infinate setState loop.
         this.modalClosed = true;
+        this.transitionTime = (this.props.transitionTime !== "undefined" && this.props.transitionTime !== "number") ? this.props.transitionTime : 300;
     }
 
     componentDidMount = () => {
         this.modalToggleButton = document.getElementById(this.props.toggleBtnRef);
         this.modalToggleButton.addEventListener('click', this.toggleModal); 
+        console.log(this);
     }
     componentWillUnmount = () => {
         this.modalToggleButton.removeEventListener('click', this.toggleModal); 
@@ -65,6 +66,7 @@ class Modal extends Component {
             <React.Fragment>
                 {this.state.modalActive ? 
                     <ModalInterface
+                        transitionTime={this.transitionTime}
                         closeButton={this.props.closeButton}
                         closeModal={this.closeModal} 
                         modalOpen={this.state.modalOpen} 

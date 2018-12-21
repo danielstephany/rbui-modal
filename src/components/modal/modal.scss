@@ -8,7 +8,9 @@
     left: 0;
     bottom: 0;
     background: rgba(0,0,0,0.2);
-    transition: opacity 0.3s ease;
+    transition-property: opacity;
+    transition-timing-function: ease;
+    transition-duration: inherit;
     will-change: opacity;
     opacity: 0;
     .modal-interface {
@@ -21,7 +23,9 @@
         overflow: hidden;
         transform: translateY(50px);
         will-change: transform;
-        transition: transform 0.3s ease;
+        transition-property: transform;
+        transition-timing-function: ease;
+        transition-duration: inherit;
         &__header {
             padding: 15px 30px 15px 15px;
             border-bottom: 1px solid #ddd;

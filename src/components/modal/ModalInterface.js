@@ -69,13 +69,17 @@ class ModalInterface extends Component {
     }
 
     render = () => {
+        const transitionStyle = {
+            transitionDuration: `${this.props.transitionTime/1000}s`,
+          };
+
         let closeButton = undefined;
         if(this.props.closeButton || typeof this.props.closeButton === "undefined"){
             closeButton = <CloseButton closeModal={this.props.closeModal}/>;
         }
 
         return (
-        <div className='modal-container' role="dialog" aria-modal="true" ref={(div)=>{this.modal = div}} onClick={this.toggleModalContainerClose}>
+        <div className='modal-container' role="dialog" aria-modal="true" ref={(div)=>{this.modal = div}} onClick={this.toggleModalContainerClose} style={transitionStyle}>
             <div className="modal-interface" role="dialog">
                 {(this.props.header && !this.props.children) ? <header className="modal-interface__header"><h4>{this.props.header}</h4>{closeButton}</header> : undefined}
                 {(this.props.body && !this.props.children) ? <div className="modal-interface__body">{this.props.body}</div> : undefined}

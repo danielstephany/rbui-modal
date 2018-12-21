@@ -29,11 +29,12 @@ class App extends Component {
                         <button className="modal-button" id="modal-button">open by passing in id to modal instance</button>
                         <Modal 
                             ref={(div)=>{this.modal = div;}}
+                            transitionTime={200}
                             toggleBtnRef={"modal-button"}
                             closeButton={true}
                             header={"this is a test header"}
                             body={<p>Lorem ipsum dolor amet prism <a href="#">test</a> blue bottle copper mug coloring book kale chips pour-over ennui shoreditch godard. Typewriter letterpress hot chicken, waistcoat tumblr lomo cornhole. Intelligentsia activated charcoal mustache selvage fam schlitz gentrify food truck.</p>}
-                            footer={<button onClick={this.closeModal}>close</button>}
+                            footer={<button onClick={()=>{this.modal.closeModal("modal-button-1")}}>close</button>}
                         >
                         </Modal>
                     </article>
