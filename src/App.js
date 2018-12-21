@@ -9,26 +9,24 @@ class App extends Component {
             modalOpen: false
         }
     }
-
-    // openModal = () => {
-    //     this.setState({modalOpen: true}); 
-    // }
-    // closeModal = () => {
-    //     this.setState({modalOpen: false}, ()=>{
-    //         this.modalButton.focus();
-    //     }); 
-    // }
+    
+    //this is how the modal can be opened using the openModal method from the modal instance
+    openModal = () => {
+        this.modal.openModal();
+    }
 
     render = () => {
-        console.dir(this.modalButton);
+  
         return(
             <div>
                 <div className="banner">
                     <article> 
                         <h2>Lorem ipsum dolor prism blue bottle.</h2>
-                        <p>Lorem ipsum dolor amet prism blue bottle copper mug coloring book kale chips pour-over ennui shoreditch godard. Typewriter letterpress hot chicken, waistcoat tumblr lomo cornhole. Intelligentsia activated charcoal mustache selvage fam schlitz gentrify food truck.</p>
+                        {/* below is an example of using a method from the modal instance. it must be wrapped in the anonamas function */}
+                        <p onClick={()=>{this.modal.openModal()}}>Lorem ipsum dolor amet prism blue bottle copper mug coloring book kale chips pour-over ennui shoreditch godard. Typewriter letterpress hot chicken, waistcoat tumblr lomo cornhole. Intelligentsia activated charcoal mustache selvage fam schlitz gentrify food truck.</p>
                         <button className="modal-button" id="modal-button" ref={(button)=>{this.modalButton = button;}}>View More</button>
                         <Modal 
+                            ref={(div)=>{this.modal = div;}}
                             toggleBtnRef={"modal-button"}
                             closeButton={true}
                             modalOpen={this.state.modalOpen}
