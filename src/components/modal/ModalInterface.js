@@ -88,7 +88,7 @@ class ModalInterface extends Component {
 }
 
 ModalInterface.propTypes = {
-    header: PropTypes.object,
+    header: PropTypes.string,
     body: PropTypes.object,
     footer: PropTypes.object,
     children: PropTypes.object
