@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './modal.scss';
 import ModalInterface from './ModalInterface.js';
+import { timingSafeEqual } from 'crypto';
 
 class Modal extends Component {
 
@@ -16,21 +17,25 @@ class Modal extends Component {
     }
 
     componentDidMount = () => {
-        // this.toggleModal(); 
         this.modalToggleButton = document.getElementById(this.props.toggleBtnRef);
         this.modalToggleButton.addEventListener('click', this.toggleModal); 
     }
-    componentDidUpdate = () => {
-        // this.toggleModal();
+    componentWillUnmount = () => {
+        this.modalToggleButton.removeEventListener('click', this.toggleModal); 
     }
 
-    openModal = () => {
+    openModal = (resetFocusElement) => {
         this.setState({
             modalOpen: true,
             modalActive: true
         }, ()=>{
             this.modalClosed = false;
         });
+        if(typeof resetFocusElement === "object"){
+            this.elementToFocusOnClose = resetFocusElement;
+        }else if (typeof resetFocusElement === "string") {
+            this.elementToFocusOnClose = document.getElementById(resetFocusElement);
+        }
     }
 
     closeModal = () => {
@@ -38,17 +43,20 @@ class Modal extends Component {
             setTimeout(()=>{
                 this.setState({ modalActive: false }, () => {
                     this.modalClosed = true;
-                    // this.props.closeModal();
+                    this.elementToFocusOnClose.focus();
                 });
             },400);
         });   
     }
 
-    toggleModal = () => {
+    toggleModal = (event) => {
         if (!this.state.modalOpen && this.modalClosed) {
             this.openModal();
         } else if (this.state.modalOpen && !this.modalClosed) {
             this.closeModal();
+        }
+        if(typeof event === "object"){
+            this.elementToFocusOnClose = event.target;
         }
     }
 
@@ -72,8 +80,7 @@ class Modal extends Component {
 }
 
 Modal.propTypes = {
-    modalOpen: PropTypes.bool.isRequired,
-    toggleBtnRef: PropTypes.node.isRequired
+    toggleBtnRef: PropTypes.node
 }
 
 export default Modal;
