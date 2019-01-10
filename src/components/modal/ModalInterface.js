@@ -15,12 +15,28 @@ class ModalInterface extends Component {
         this.focusIndex = 0;
         this.trapFocus();
         this.validateProps();
+        this.draggable(true);
     }
 
     componentDidUpdate = () => {
         if(!this.props.modalOpen){
             this.modal.classList.remove("active");
         }
+    }
+
+    draggable = () => {
+        const draggable = this.modal.getElementsByClassName("draggable")[0];
+        if(typeof draggable !== "undefined"){
+            this.modal.addEventListener("mousedown", function(e){
+                console.log(e);
+            });
+            this.modal.addEventListener("mousemove", function(e){
+                console.log(e);
+            });
+            this.modal.addEventListener("mouseup", function(e){
+                console.log(e);
+            });
+        }   
     }
 
     toggleModalContainerClose = (e) => {
@@ -32,8 +48,6 @@ class ModalInterface extends Component {
     getfocusList = () => {
         return this.focusList;
     }
-
-   
 
     modalKeyCtrl = (event) => {
             if(event.key === "Tab" && event.shiftKey){
@@ -81,7 +95,7 @@ class ModalInterface extends Component {
         return (
         <div className='modal-container' role="dialog" aria-modal="true" ref={(div)=>{this.modal = div}} onClick={this.toggleModalContainerClose} style={transitionStyle}>
             <div className="modal-interface" role="dialog">
-                {(this.props.header && !this.props.children) ? <header className="modal-interface__header"><h4>{this.props.header}</h4>{closeButton}</header> : undefined}
+                {(this.props.header && !this.props.children) ? <header className={`modal-interface__header ${this.props.draggable ? "draggable" : ""}`}><h4>{this.props.header}</h4>{closeButton}</header> : undefined}
                 {(this.props.body && !this.props.children) ? <div className="modal-interface__body">{this.props.body}</div> : undefined}
                 {this.props.children}
                 {(this.props.footer && !this.props.children) ? <footer className="modal-interface__footer">{this.props.footer}</footer> : undefined}

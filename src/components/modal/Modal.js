@@ -73,7 +73,9 @@ class Modal extends Component {
                         header={this.props.header} 
                         body={this.props.body} 
                         footer={this.props.footer}
-                        children={this.props.children}/> 
+                        children={this.props.children}
+                        draggable={this.props.draggable}
+                        /> 
                     : 
                     undefined}
             </React.Fragment>
