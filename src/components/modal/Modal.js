@@ -18,8 +18,7 @@ class Modal extends Component {
 
     componentDidMount = () => {
         this.modalToggleButton = document.getElementById(this.props.toggleBtnRef);
-        this.modalToggleButton.addEventListener('click', this.toggleModal); 
-        console.log(this);
+        this.modalToggleButton.addEventListener('click', this.toggleModal);
     }
     componentWillUnmount = () => {
         this.modalToggleButton.removeEventListener('click', this.toggleModal); 
