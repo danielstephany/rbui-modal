@@ -21,6 +21,7 @@
         right: initial;
         bottom: initial;
         margin: 0 auto;
+        will-change: transform;
         transform: translate(-50% , 0);
         min-width: 500px;
         background: transparent;

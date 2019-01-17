@@ -74,34 +74,32 @@ export default class Draggable {
     //     return false;
     // }
 
-    _getModalXCoordinates = function (x) {
-        if(typeof x !== 'undefined'){
-            this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + x;
-            if (this._currentModalLeft <= 0){
-                this._currentModalLeft = -this._modalInitialLeft;
-                return this._currentModalLeft;
-            } else if ( (this._currentModalLeft + this._modalOffsetWidth) >= this._windowInnerWidth){
-                this._currentModalLeft = this._windowInnerWidth - (this._modalInitialLeft + this._modalOffsetWidth);
-                return this._currentModalLeft;
-            }
-            return this._previousTranslateX + x;
+    _getModalXCoordinates = function () {
+        if(typeof this._offsetX === 'undefined') return this._previousTranslateX;
+
+        this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
+        if (this._currentModalLeft <= 0){
+            this._currentModalLeft = -this._modalInitialLeft;
+            return this._currentModalLeft;
+        } else if ( (this._currentModalLeft + this._modalOffsetWidth) >= this._windowInnerWidth){
+            this._currentModalLeft = this._windowInnerWidth - (this._modalInitialLeft + this._modalOffsetWidth);
+            return this._currentModalLeft;
         }
-        
+        return this._previousTranslateX + this._offsetX;
     }
 
-    _getModalYCoordinates = function (y) {
-        if(typeof y !== 'undefined'){
-            this._currentModalTop = this._modalInitialTop + this._previousTranslateY + y;
-            if (this._currentModalTop <= 0){
-                this._currentModalTop = this._modalInitialTop;
-                // console.log(this._currentModalTop);
-                return -this._currentModalTop;
-            } else if(this._currentModalTop + this._modalOffsetHeight >= this._windowInnerHeight){
-                this._currentModalTop = this._windowInnerHeight - (this._modalInitialTop + this._modalOffsetHeight);
-                return this._currentModalTop;
-            }
-            return this._previousTranslateY + y;
+    _getModalYCoordinates = function () {
+        if(typeof this._offsetY === 'undefined') return this._previousTranslateY;
+
+        this._currentModalTop = this._modalInitialTop + this._previousTranslateY + this._offsetY;
+        if (this._currentModalTop <= 0){
+            this._currentModalTop = this._modalInitialTop;
+            return -this._currentModalTop;
+        } else if(this._currentModalTop + this._modalOffsetHeight >= this._windowInnerHeight){
+            this._currentModalTop = this._windowInnerHeight - (this._modalInitialTop + this._modalOffsetHeight);
+            return this._currentModalTop;
         }
+        return this._previousTranslateY + this._offsetY; 
     }
 
     /*************
@@ -111,8 +109,8 @@ export default class Draggable {
     _animateModal = function () {
         window.requestAnimationFrame(() => {
             if (this._initialX) {
-                console.log(this._initialX,"x: "+this._getModalXCoordinates(this._offsetX), "y: " + this._getModalYCoordinates(this._offsetY));
-                this._modal.style.transform = `translate(calc(-50% + ${this._getModalXCoordinates(this._offsetX)}px), ${this._getModalYCoordinates(this._offsetY)}px)`;
+                // console.log(this._initialX, "x: "+this._getModalXCoordinates(), "y: " + this._getModalYCoordinates());
+                this._modal.style.transform = `translate(calc(-50% + ${this._getModalXCoordinates()}px), ${this._getModalYCoordinates()}px)`;
             }
         })
     }
@@ -144,12 +142,10 @@ export default class Draggable {
         this._modal.classList.remove("dragging");
         this._initialX = undefined;
         this._initialY = undefined;
-
-        this._previousTranslateX = (this._getModalXCoordinates(this._offsetX) !== undefined) ? this._getModalXCoordinates(this._offsetX) : this._previousTranslateX;
-        this._previousTranslateY = (this._getModalYCoordinates(this._offsetY) !== undefined) ? this._getModalYCoordinates(this._offsetY) : this._previousTranslateY;
+        this._previousTranslateX = this._getModalXCoordinates();
+        this._previousTranslateY = this._getModalYCoordinates();
 
         console.log("end x: " + this._previousTranslateX, "y: " + this._previousTranslateY );
-
     }
 
     draggable = function() {
