@@ -23,7 +23,15 @@
         margin: 0 auto;
         transform: translate(-50% , 0);
         min-width: 500px;
-        background: transparent;;
+        background: transparent;
+        .modal-interface__header {
+            cursor: grab;
+        }
+    }
+    &.dragging {
+        .modal-interface__header {
+            cursor: grabbing;
+        }
     }
     .modal-interface {
         background: #fff;
