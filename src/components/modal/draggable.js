@@ -1,6 +1,8 @@
+import throttledResize from './Resize';
+
 export default class Draggable {
 
-    constructor(modal){
+    constructor(modal, options){
         this._modal = modal;
         this._header = undefined;
         this._initialX = undefined;
@@ -9,27 +11,36 @@ export default class Draggable {
         this._offsetY = undefined;
         this._previousTranslateX = 0;
         this._previousTranslateY = 0;
-        // this._modalCurrentX = undefined;
-        // this._modalCurrentY = undefined;
         this._currentModalLeft = undefined;
         this._currentModalTop = undefined;
         this._modalInitialTop = undefined;
-        // this._modalInitialBottom = undefined;
         this._modalInitialLeft = undefined;
-        // this._modalInitialRight = undefined;
         this._modalOffsetHeight = undefined;
         this._modalOffsetWidth = undefined;
         this._windowInnerWidth = undefined;
         this._windowInnerHeight = undefined;
+
+        this._concontainedInWindow = true;
         
-        this._setModalCoordinates();
+        this._setOptions(options);
         this._setWindowCoordinates();
+        this._setModalCoordinates();
         this.draggable();
+        this.throttledResize = new throttledResize();
+        this.throttledResize.setEvent(this._resetValues.bind(this));
     }    
 
     /******
     setters
     *******/
+
+    _setOptions(options){
+        if(typeof options !== "undefined"){
+            if(typeof options.containedInWindow !== 'undefined'){
+                this._concontainedInWindow = options.containedInWindow;
+            }
+        }
+    }
 
     _setWindowCoordinates = function () {
         const windowObj = window;
@@ -44,45 +55,26 @@ export default class Draggable {
         this._modalOffsetWidth = this._modal.offsetWidth;
         this._modalInitialTop = modalCoordinates.top;
         this._currentModalTop = this._modalInitialTop;
-        // this._modalInitialBottom = this._modalInitialTop + this._modalOffsetHeight;
         this._modalInitialLeft = modalCoordinates.left;
         this._currentModalLeft = this._modalInitialLeft;
-        // this._modalInitialRight = this._modalInitialLeft + this._modalOffsetWidth;
     }
 
-    /*****************
-    positioning checks
-    ******************/
-
-    // _yAxisInBounds = function () {
-    //     //check that modal is within the window on the y-axis
-    //     console.log(this._currentModalTop);
-    //     if (this._currentModalTop > 0 && this._modalInitialBottom < this._windowInnerHeight ) {
-    //         // console.log(this._currentModalTop);
-    //         return true;
-    //     } 
-    //     return false;
-    // }
-
-    // _xAxisInBounds = function() {
-    //     //check that modal is within the window on the x-axis
-    //     console.log(this._currentModalLeft);
-    //     if (this._currentModalLeft > 0 && this._modalInitialRight < this._windowInnerWidth ) {
-    //         // console.log(this._currentModalLeft);
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    _resetValues = function() {
+        this._setWindowCoordinates();
+        this._setModalCoordinates();
+    }
 
     _getModalXCoordinates = function () {
         if(typeof this._offsetX === 'undefined') return this._previousTranslateX;
 
+        let modifier = this._concontainedInWindow? 0 : (this._modalOffsetWidth - 40);
+
         this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
-        if (this._currentModalLeft <= 0){
-            this._currentModalLeft = -this._modalInitialLeft;
+        if (this._currentModalLeft <= (0 - modifier)){
+            this._currentModalLeft = -this._modalInitialLeft - modifier;
             return this._currentModalLeft;
-        } else if ( (this._currentModalLeft + this._modalOffsetWidth) >= this._windowInnerWidth){
-            this._currentModalLeft = this._windowInnerWidth - (this._modalInitialLeft + this._modalOffsetWidth);
+        } else if ( (this._currentModalLeft + this._modalOffsetWidth) >= (this._windowInnerWidth + modifier)){
+            this._currentModalLeft = this._windowInnerWidth - (this._modalInitialLeft + this._modalOffsetWidth) + modifier;
             return this._currentModalLeft;
         }
         return this._previousTranslateX + this._offsetX;
@@ -91,12 +83,14 @@ export default class Draggable {
     _getModalYCoordinates = function () {
         if(typeof this._offsetY === 'undefined') return this._previousTranslateY;
 
+        let modifier = this._concontainedInWindow? 0 : (this._modalOffsetHeight - 40);
+
         this._currentModalTop = this._modalInitialTop + this._previousTranslateY + this._offsetY;
         if (this._currentModalTop <= 0){
             this._currentModalTop = this._modalInitialTop;
             return -this._currentModalTop;
-        } else if(this._currentModalTop + this._modalOffsetHeight >= this._windowInnerHeight){
-            this._currentModalTop = this._windowInnerHeight - (this._modalInitialTop + this._modalOffsetHeight);
+        } else if(this._currentModalTop + this._modalOffsetHeight >= (this._windowInnerHeight + modifier)){
+            this._currentModalTop = this._windowInnerHeight - (this._modalInitialTop + this._modalOffsetHeight) + modifier;
             return this._currentModalTop;
         }
         return this._previousTranslateY + this._offsetY; 
@@ -109,7 +103,6 @@ export default class Draggable {
     _animateModal = function () {
         window.requestAnimationFrame(() => {
             if (this._initialX) {
-                // console.log(this._initialX, "x: "+this._getModalXCoordinates(), "y: " + this._getModalYCoordinates());
                 this._modal.style.transform = `translate(calc(-50% + ${this._getModalXCoordinates()}px), ${this._getModalYCoordinates()}px)`;
             }
         })
@@ -123,7 +116,6 @@ export default class Draggable {
         this._modal.classList.add("dragging");
         this._initialX = e.clientX;
         this._initialY = e.clientY;
-        // console.log(this._initialX);
     }
 
     _handleDrag = function(e) {
@@ -133,8 +125,6 @@ export default class Draggable {
 
             this._animateModal(this._offsetX, this._offsetY);
         }
-
-        // console.log('drag:', `x: ${this._offsetX} y: ${this._offsetY}`);
     }
 
     _endDrag = function(e) {
@@ -144,18 +134,20 @@ export default class Draggable {
         this._initialY = undefined;
         this._previousTranslateX = this._getModalXCoordinates();
         this._previousTranslateY = this._getModalYCoordinates();
-
-        console.log("end x: " + this._previousTranslateX, "y: " + this._previousTranslateY );
     }
 
     draggable = function() {
         if(this._modal.classList.contains("draggable")){
             this._header = this._modal.getElementsByClassName("modal-interface__header")[0];
-
             this._header.addEventListener("mousedown", this._initiatDrag.bind(this));
+
             document.addEventListener("mousemove", this._handleDrag.bind(this));
             document.addEventListener("mouseup", this._endDrag.bind(this));
         }
     } 
+
+    destroy = function() {
+        this.throttledResize.removeEvent();
+    }
        
 }

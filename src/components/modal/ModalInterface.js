@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import CloseButton from './closeButton/closeButton';
-import Draggable from './draggable';
+import Draggable from './Draggable';
 
 class ModalInterface extends Component {
 
@@ -16,12 +16,27 @@ class ModalInterface extends Component {
         this.focusIndex = 0;
         this.trapFocus();
         this.validateProps();
-        this.draggable = new Draggable(this.modal);
+        this._setDraggable();
     }
 
     componentDidUpdate = () => {
         if(!this.props.modalOpen){
             this.modal.classList.remove("active");
+        }
+    }
+
+    componentWillUnmount = () => {
+        this.draggable.destroy();
+    }
+
+    _setDraggable = () => {
+        if(this.props.draggable){
+            const draggableOptions = {};
+            if(typeof this.props.containedInWindow !== "undefined"){
+                draggableOptions.containedInWindow = this.props.containedInWindow;
+            }
+            
+            this.draggable = new Draggable(this.modal, draggableOptions);
         }
     }
 
@@ -95,7 +110,8 @@ ModalInterface.propTypes = {
     header: PropTypes.string,
     body: PropTypes.object,
     footer: PropTypes.object,
-    children: PropTypes.object
+    children: PropTypes.object,
+    containedInWindow: PropTypes.bool
 }
 
 export default ModalInterface;

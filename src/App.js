@@ -15,6 +15,10 @@ class App extends Component {
         this.modal.openModal(resetFucusElement);
     }
 
+    modalRef = (modal) => {
+        this.modal = modal;
+    }
+
     render = () => {
   
         return(
@@ -28,7 +32,7 @@ class App extends Component {
                         <button className="modal-button" ref={button => {this.button = button}} onClick={()=>{this.modal.openModal(this.button)}}>open using modal instance method (ref)</button>
                         <button className="modal-button" id="modal-button">open by passing in id to modal instance</button>
                         <Modal 
-                            ref={(div)=>{this.modal = div;}}
+                            ref={this.modalRef}
                             transitionTime={200}
                             toggleBtnRef={"modal-button"}
                             closeButton={true}
@@ -36,6 +40,7 @@ class App extends Component {
                             body={<p>Lorem ipsum dolor amet prism <a href="#">test</a> blue bottle copper mug coloring book kale chips pour-over ennui shoreditch godard. Typewriter letterpress hot chicken, waistcoat tumblr lomo cornhole. Intelligentsia activated charcoal mustache selvage fam schlitz gentrify food truck.</p>}
                             footer={<button onClick={()=>{this.modal.closeModal("modal-button-1")}}>close</button>}
                             draggable={true}
+                            containedInWindow={true}
                        >
                         </Modal>
                     </article>
