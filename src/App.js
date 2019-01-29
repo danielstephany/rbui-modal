@@ -3,13 +3,6 @@ import Modal from './components/modal/Modal';
 
 class App extends Component {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            modalOpen: false
-        }
-    }
-    
     //this is how the modal can be opened using the openModal method from the modal instance
     openModal = (resetFucusElement) => {
         this.modal.openModal(resetFucusElement);
