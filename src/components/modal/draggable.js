@@ -68,6 +68,7 @@ export default class Draggable {
         if(typeof this._offsetX === 'undefined') return this._previousTranslateX;
 
         let modifier = this._concontainedInWindow? 0 : (this._modalOffsetWidth - 40);
+        console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
 
         this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
         if (this._currentModalLeft <= (0 - modifier)){
@@ -125,14 +126,16 @@ export default class Draggable {
 
     _handleDrag = function(e) {
         e.preventDefault();
-        if(e.touches){
-            this._offsetX = (this._initialX - e.touches[0].clientX) * -1;
-            this._offsetY = (this._initialY - e.touches[0].clientY) * -1;
-        }else {
-            this._offsetX = (this._initialX - e.clientX) * -1;
-            this._offsetY = (this._initialY - e.clientY) * -1;
+        if(this._initialX){
+            if(e.touches){
+                this._offsetX = (this._initialX - e.touches[0].clientX) * -1;
+                this._offsetY = (this._initialY - e.touches[0].clientY) * -1;
+            }else {
+                this._offsetX = (this._initialX - e.clientX) * -1;
+                this._offsetY = (this._initialY - e.clientY) * -1;
+            }
+            this._animateModal(this._offsetX, this._offsetY);
         }
-        this._animateModal(this._offsetX, this._offsetY);
     }
 
     _endDrag = function(e) {
@@ -142,7 +145,8 @@ export default class Draggable {
             this._initialY = undefined;
             this._previousTranslateX = this._getModalXCoordinates();
             this._previousTranslateY = this._getModalYCoordinates();
-            console.log(this._previousTranslateX, this._previousTranslateY, this._modalInitialTop);
+            // console.log(this._previousTranslateX, this._previousTranslateY, this._modalInitialTop);
+            console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
         }
     }
 
