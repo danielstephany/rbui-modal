@@ -74,6 +74,7 @@ class Modal extends Component {
                         footer={this.props.footer}
                         children={this.props.children}
                         draggable={this.props.draggable}
+                        containedInWindow={this.props.containedInWindow}
                         /> 
                     : 
                     undefined}
