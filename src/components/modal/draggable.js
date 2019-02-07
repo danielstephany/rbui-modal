@@ -9,8 +9,6 @@ export default class Draggable {
         this._offsetY = undefined;
         this._previousTranslateX = 0;
         this._previousTranslateY = 0;
-        // this._modalCurrentX = undefined;
-        // this._modalCurrentY = undefined;
         this._currentModalLeft = undefined;
         this._currentModalTop = undefined;
         this._modalInitialTop = undefined;
