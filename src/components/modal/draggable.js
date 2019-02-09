@@ -57,21 +57,24 @@ export default class Draggable {
         this._currentModalTop = this._modalInitialTop;
         this._modalInitialLeft = modalCoordinates.left;
         this._currentModalLeft = this._modalInitialLeft;
+        console.log(this._modalInitialTop, this._modalInitialLeft);
     }
 
     _resetValues = function() {
+        // this._previousTranslateX = this._previousTranslateX - (this._windowInnerWidth - this._window.innerWidth);
+        // this._previousTranslateY = this._previousTranslateY - (this._windowInnerHeight - this._window.innerHeight);
         this._setWindowCoordinates();
-        const modalCoordinates = this._modal.getBoundingClientRect();
-        console.log(modalCoordinates.top);
+        this._setModalCoordinates();
     }
 
     _getModalXCoordinates = function () {
         if(typeof this._offsetX === 'undefined') return this._previousTranslateX;
 
         let modifier = this._concontainedInWindow? 0 : (this._modalOffsetWidth - 40);
-        console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
 
         this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
+        console.log(this._currentModalLeft);
+        console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
         if (this._currentModalLeft <= (0 - modifier)){
             this._currentModalLeft = -this._modalInitialLeft - modifier;
             return this._currentModalLeft;
@@ -86,8 +89,8 @@ export default class Draggable {
         if(typeof this._offsetY === 'undefined') return this._previousTranslateY;
 
         let modifier = this._concontainedInWindow? 0 : (this._modalOffsetHeight - 40);
-
         this._currentModalTop = this._modalInitialTop + this._previousTranslateY + this._offsetY;
+
         if (this._currentModalTop <= 0){
             this._currentModalTop = this._modalInitialTop;
             return -this._currentModalTop;
