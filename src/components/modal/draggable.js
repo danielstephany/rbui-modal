@@ -11,6 +11,8 @@ export default class Draggable {
         this._initialY = undefined;
         this._offsetX = undefined;
         this._offsetY = undefined;
+        this._preResizeTranslateX = 0;
+        this._preResizeTranslateY = 0;
         this._previousTranslateX = 0;
         this._previousTranslateY = 0;
         this._currentModalLeft = undefined;
@@ -29,7 +31,7 @@ export default class Draggable {
         this._setModalCoordinates();
         this.draggable();
         this.throttledResize = new throttledResize();
-        this.throttledResize.setEvent(this._resetValues.bind(this));
+        this.throttledResize.setEvent(this._onResizeStrart.bind(this), this._onResize.bind(this));
     }    
 
     /******
@@ -45,6 +47,8 @@ export default class Draggable {
     }
 
     _setWindowCoordinates = function () {
+        this._preResizeWindowInnerHeight = 
+        this._preResizeWindowInnerWidth = 
         this._windowInnerHeight = this._window.innerHeight;
         this._windowInnerWidth = this._window.innerWidth;
     }
@@ -57,28 +61,48 @@ export default class Draggable {
         this._currentModalTop = this._modalInitialTop;
         this._modalInitialLeft = modalCoordinates.left;
         this._currentModalLeft = this._modalInitialLeft;
-        console.log(this._modalInitialTop, this._modalInitialLeft);
     }
 
-    _resetValues = function() {
-        // this._previousTranslateX = this._previousTranslateX - (this._windowInnerWidth - this._window.innerWidth);
-        // this._previousTranslateY = this._previousTranslateY - (this._windowInnerHeight - this._window.innerHeight);
+    _onResizeStrart = function() {
+        this._preResizeTranslateX += this._previousTranslateX;
+        this._preResizeTranslateY += this._previousTranslateY;
+        this._previousTranslateX = 0;
+        this._previousTranslateY = 0;
+    }
+
+
+    //TODO: RESIZE LOGIC WORKS FINE WHEN I RESIZE THE PAGE SLOWLY BUT IF I RESIZE IT FAST THE VALUES ARE OFF
+    _onResize = function() {
         this._setWindowCoordinates();
         this._setModalCoordinates();
     }
 
-    _getModalXCoordinates = function () {
-        if(typeof this._offsetX === 'undefined') return this._previousTranslateX;
-
-        let modifier = this._concontainedInWindow? 0 : (this._modalOffsetWidth - 40);
+    _keepModalInWindow = function() {
+        const modifier = this._concontainedInWindow ? 0 : (this._modalOffsetWidth - 40);
 
         this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
         console.log(this._currentModalLeft);
         console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
-        if (this._currentModalLeft <= (0 - modifier)){
+        if (this._currentModalLeft <= (0 - modifier)) { //modal is left of the left of the screen
             this._currentModalLeft = -this._modalInitialLeft - modifier;
             return this._currentModalLeft;
-        } else if ( (this._currentModalLeft + this._modalOffsetWidth) >= (this._windowInnerWidth + modifier)){
+        } else if ((this._currentModalLeft + this._modalOffsetWidth) >= (this._windowInnerWidth + modifier)) { //modal is right of the left of the screen
+            this._currentModalLeft = this._windowInnerWidth - (this._modalInitialLeft + this._modalOffsetWidth) + modifier;
+            return this._currentModalLeft;
+        }
+        return this._previousTranslateX + this._offsetX;
+    }
+
+    _getModalXCoordinates = function () {
+        const modifier = this._concontainedInWindow ? 0 : (this._modalOffsetWidth - 40);        
+
+        this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
+        console.log(this._currentModalLeft);
+        console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
+        if (this._currentModalLeft <= (0 - modifier)){ //modal is left of the left of the screen
+            this._currentModalLeft = -this._modalInitialLeft - modifier;
+            return this._currentModalLeft;
+        } else if ((this._currentModalLeft + this._modalOffsetWidth) >= (this._windowInnerWidth + modifier)) { //modal is right of the left of the screen
             this._currentModalLeft = this._windowInnerWidth - (this._modalInitialLeft + this._modalOffsetWidth) + modifier;
             return this._currentModalLeft;
         }
@@ -86,9 +110,7 @@ export default class Draggable {
     }
 
     _getModalYCoordinates = function () {
-        if(typeof this._offsetY === 'undefined') return this._previousTranslateY;
-
-        let modifier = this._concontainedInWindow? 0 : (this._modalOffsetHeight - 40);
+        const modifier = this._concontainedInWindow? 0 : (this._modalOffsetHeight - 40);
         this._currentModalTop = this._modalInitialTop + this._previousTranslateY + this._offsetY;
 
         if (this._currentModalTop <= 0){
@@ -101,6 +123,22 @@ export default class Draggable {
         return this._previousTranslateY + this._offsetY; 
     }
 
+    _getModalXCoordinatesOnResize = function () {
+        const modifier = this._concontainedInWindow ? 0 : (this._modalOffsetWidth - 40);
+
+        this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
+        console.log(this._currentModalLeft);
+        console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
+        if (this._currentModalLeft <= (0 - modifier)) { //modal is left of the left of the screen
+            this._currentModalLeft = -this._modalInitialLeft - modifier;
+            return this._currentModalLeft;
+        } else if ((this._currentModalLeft + this._modalOffsetWidth) >= (this._windowInnerWidth + modifier)) { //modal is right of the left of the screen
+            this._currentModalLeft = this._windowInnerWidth - (this._modalInitialLeft + this._modalOffsetWidth) + modifier;
+            return this._currentModalLeft;
+        }
+        return this._previousTranslateX + this._offsetX;
+    }
+
     /*************
     andimate modal
     **************/
@@ -108,10 +146,11 @@ export default class Draggable {
     _animateModal = function () {
         window.requestAnimationFrame(() => {
             if (this._initialX) {
-                this._modal.style.transform = `translate(calc(-50% + ${this._getModalXCoordinates()}px), ${this._getModalYCoordinates()}px)`;
+                this._modal.style.transform = `translate(calc(-50% + ${this._preResizeTranslateX + this._getModalXCoordinates()}px), ${this._preResizeTranslateY + this._getModalYCoordinates()}px)`;
             }
         })
     }
+
 
     /***********
      drag events
@@ -148,7 +187,6 @@ export default class Draggable {
             this._modal.classList.remove("dragging");
             this._initialX = undefined;
             this._initialY = undefined;
-            console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
         }
         if (this.dragging) {
             this.dragging = false;

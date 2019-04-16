@@ -1,29 +1,43 @@
 export default class throttledResize {
     constructor(){
+        this.onStart = undefined;
         this.cb = undefined;
         this.time = undefined;
         this.timeout = undefined;
+        this._firstCalled = false;
     }
 
     _throttledResize = () => {
-        if(typeof this.time === "undefined"){
-            this.time = Date.now();
+        const currentTime = Date.now();
+
+        if(!this._firstCalled){
+            this.onStart();
+            this._firstCalled = true;
+            this.timeout = setTimeout(this.resizeEndCallBack, 250);
         }
 
-        if((Date.now() - this.time) > 200){
-            this.time = Date.now();
-            clearTimeout(this.timeout)
-            this.timeout = setTimeout(()=> {
-                this.cb();
-                this.time = undefined;
-                console.log("end");
-            }, 300);
+        if(typeof this.time === "undefined"){
+            this.time = currentTime;
+        }
+
+        if ((currentTime - this.time) > 200){
+            this.time = currentTime;
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(this.resizeEndCallBack, 250);
             this.cb();
         }
     }
 
-    setEvent = (fn) => {
+    resizeEndCallBack = () => {
+        this.cb();
+        this.time = undefined;
+        this.timeout = undefined;
+        this._firstCalled = false;
+    }
+
+    setEvent = (onStart, fn) => {
         this.cb = fn;
+        this.onStart = onStart;
         window.addEventListener("resize", this._throttledResize);
     }
 
