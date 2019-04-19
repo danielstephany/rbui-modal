@@ -75,6 +75,7 @@ class Modal extends Component {
                         children={this.props.children}
                         draggable={this.props.draggable}
                         containedInWindow={this.props.containedInWindow}
+                        maxWidth={this.props.maxWidth}
                         /> 
                     : 
                     undefined}
@@ -84,7 +85,8 @@ class Modal extends Component {
 }
 
 Modal.propTypes = {
-    toggleBtnRef: PropTypes.node
+    toggleBtnRef: PropTypes.node,
+    maxWidth: PropTypes.number
 }
 
 export default Modal;

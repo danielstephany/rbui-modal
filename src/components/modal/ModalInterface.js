@@ -84,9 +84,18 @@ class ModalInterface extends Component {
     }
 
     render = () => {
-        const transitionStyle = {
-            transitionDuration: `${this.props.transitionTime/1000}s`,
-          };
+        let containerStyles = {},
+            interfaceStyles = {};
+
+        if (this.props.transitionTime){
+            containerStyles.transitionDuration = `${this.props.transitionTime / 1000}s`;
+        }
+        if (this.props.maxWidth) {
+            if (this.props.draggable){
+                containerStyles.maxWidth = this.props.maxWidth + "px";
+            }
+            interfaceStyles.maxWidth = this.props.maxWidth + "px";
+        }
 
         let closeButton = undefined;
         if(this.props.closeButton || typeof this.props.closeButton === "undefined"){
@@ -94,8 +103,8 @@ class ModalInterface extends Component {
         }
 
         return (
-        <div className={`modal-container ${this.props.draggable ? "draggable" : ""}`} role="dialog" aria-modal="true" ref={(div)=>{this.modal = div}} onClick={this.toggleModalContainerClose} style={transitionStyle}>
-            <div className="modal-interface" role="dialog">
+            <div className={`modal-container ${this.props.draggable ? "draggable" : ""}`} role="dialog" aria-modal="true" ref={(div) => { this.modal = div }} onClick={this.toggleModalContainerClose} style={containerStyles}>
+                <div className="modal-interface" role="dialog" style={interfaceStyles}>
                 {(this.props.header && !this.props.children) ? <header className="modal-interface__header"><h4>{this.props.header}</h4>{closeButton}</header> : undefined}
                 {(this.props.body && !this.props.children) ? <div className="modal-interface__body">{this.props.body}</div> : undefined}
                 {this.props.children}
@@ -111,7 +120,8 @@ ModalInterface.propTypes = {
     body: PropTypes.object,
     footer: PropTypes.object,
     children: PropTypes.object,
-    containedInWindow: PropTypes.bool
+    containedInWindow: PropTypes.bool,
+    maxWidth: PropTypes.number
 }
 
 export default ModalInterface;
