@@ -23,7 +23,8 @@
         margin: 0 auto;
         will-change: transform;
         transform: translate(-50% , 0);
-        min-width: 500px;
+        width: 100%;
+        max-width: 500px;
         background: transparent;
         .modal-interface__header {
             cursor: grab;

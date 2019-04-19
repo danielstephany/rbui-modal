@@ -26,7 +26,7 @@ class ModalInterface extends Component {
     }
 
     componentWillUnmount = () => {
-        this.draggable.destroy();
+        if (this.draggable) this.draggable.destroy();
     }
 
     _setDraggable = () => {
