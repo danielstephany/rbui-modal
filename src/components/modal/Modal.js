@@ -11,15 +11,18 @@ class Modal extends Component {
             modalOpen: false,
             modalActive: false
         }
-        // this update is used to prevent an infinate setState loop.
+
         this.modalClosed = true;
         this.transitionTime = (this.props.transitionTime !== "undefined" && this.props.transitionTime !== "number") ? this.props.transitionTime : 300;
     }
 
     componentDidMount = () => {
-        this.modalToggleButton = document.getElementById(this.props.toggleBtnRef);
-        this.modalToggleButton.addEventListener('click', this.toggleModal);
+        this.toggleModal();
     }
+    componentDidUpdate = () => {
+        this.toggleModal();
+    }
+
     componentWillUnmount = () => {
         this.modalToggleButton.removeEventListener('click', this.toggleModal); 
     }
@@ -28,8 +31,6 @@ class Modal extends Component {
         this.setState({
             modalOpen: true,
             modalActive: true
-        }, ()=>{
-            this.modalClosed = false;
         });
         if(typeof resetFocusElement === "object"){
             this.elementToFocusOnClose = resetFocusElement;
@@ -38,25 +39,33 @@ class Modal extends Component {
         }
     }
 
+    setClosingFocusElement = (resetFocusElement) => {
+        if (typeof resetFocusElement === "object") {
+            this.elementToFocusOnClose = resetFocusElement;
+        } else if (typeof resetFocusElement === "string") {
+            this.elementToFocusOnClose = document.getElementById(resetFocusElement);
+        }
+    }
+
     closeModal = () => {
-        this.setState({ modalOpen: false}, ()=>{
+        this.setState({ modalOpen: false, transitioning: true}, () => {
             setTimeout(()=>{
-                this.setState({ modalActive: false }, () => {
-                    this.modalClosed = true;
-                    this.elementToFocusOnClose.focus();
+                this.setState({ modalActive: false, transitioning: false }, () => {
+                    this.props.elementToFocusOnClose.focus();
                 });
-            },400);
+            }, this.transitionTime);
         });   
     }
 
-    toggleModal = (event) => {
-        if (!this.state.modalOpen && this.modalClosed) {
-            this.openModal();
-        } else if (this.state.modalOpen && !this.modalClosed) {
-            this.closeModal();
-        }
-        if(typeof event === "object"){
-            this.elementToFocusOnClose = event.target;
+    toggleModal = () => {
+        if (!this.state.transitioning) {
+            if (this.props.modalOpen && this.modalClosed) {
+                this.modalClosed = false;
+                this.openModal();
+            } else if (!this.props.modalOpen && !this.modalClosed) {
+                this.modalClosed = true;
+                this.closeModal();
+            }
         }
     }
 
@@ -67,7 +76,7 @@ class Modal extends Component {
                     <ModalInterface
                         transitionTime={this.transitionTime}
                         closeButton={this.props.closeButton}
-                        closeModal={this.closeModal} 
+                        closeModal={this.props.handleClose} 
                         modalOpen={this.state.modalOpen} 
                         header={this.props.header} 
                         body={this.props.body} 
@@ -86,7 +95,10 @@ class Modal extends Component {
 
 Modal.propTypes = {
     toggleBtnRef: PropTypes.node,
-    maxWidth: PropTypes.number
+    maxWidth: PropTypes.number,
+    closeModale: PropTypes.func,
+    modalOpen: PropTypes.bool.isRequired,
+    elementToFocusOnClose: PropTypes.object
 }
 
 export default Modal;

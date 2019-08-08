@@ -81,8 +81,7 @@ export default class Draggable {
         const modifier = this._concontainedInWindow ? 0 : (this._modalOffsetWidth - 40);
 
         this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
-        console.log(this._currentModalLeft);
-        console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
+
         if (this._currentModalLeft <= (0 - modifier)) { //modal is left of the left of the screen
             this._currentModalLeft = -this._modalInitialLeft - modifier;
             return this._currentModalLeft;
@@ -97,8 +96,7 @@ export default class Draggable {
         const modifier = this._concontainedInWindow ? 0 : (this._modalOffsetWidth - 40);        
 
         this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
-        console.log(this._currentModalLeft);
-        console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
+
         if (this._currentModalLeft <= (0 - modifier)){ //modal is left of the left of the screen
             this._currentModalLeft = -this._modalInitialLeft - modifier;
             return this._currentModalLeft;
@@ -127,8 +125,7 @@ export default class Draggable {
         const modifier = this._concontainedInWindow ? 0 : (this._modalOffsetWidth - 40);
 
         this._currentModalLeft = this._modalInitialLeft + this._previousTranslateX + this._offsetX;
-        console.log(this._currentModalLeft);
-        console.log(this._modalInitialLeft, this._previousTranslateX, this._offsetX);
+
         if (this._currentModalLeft <= (0 - modifier)) { //modal is left of the left of the screen
             this._currentModalLeft = -this._modalInitialLeft - modifier;
             return this._currentModalLeft;
