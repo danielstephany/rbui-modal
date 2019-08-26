@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Modal from './components/modal/Modal';
+import Modal from 'dsui-modal';
 
 class App extends Component {
 

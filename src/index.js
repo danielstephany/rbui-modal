@@ -1,6 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './assets/scss/main.scss';
-import App from './App';
+import Modal from './modal/Modal.js';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+export default Modal;

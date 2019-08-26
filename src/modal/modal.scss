@@ -1,4 +1,5 @@
 .modal-container {
+    box-sizing: borde-box;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,6 +37,7 @@
         }
     }
     .modal-interface {
+        box-sizing: borde-box;
         background: #fff;
         border-radius: 4px;
         box-shadow: 0 0 5px 1px rgba(0,0,0,0.4);
@@ -49,22 +51,26 @@
         transition-timing-function: ease;
         transition-duration: inherit;
         &__header {
+            box-sizing: borde-box;
             padding: 15px 30px 15px 15px;
             border-bottom: 1px solid #ddd;
             h4 {
                 margin: 0;
             }
             .close-modal-button {
+                box-sizing: border-box;
                 position: absolute;
                 top: 0;
                 right: 0;
             }
         }
         &__body {
+            box-sizing: border-box;
             padding: 15px;
             border-bottom: 1px solid #ddd;
         }
         &__footer {
+            box-sizing: border-box;
             padding: 15px;
             text-align: right;
         }
