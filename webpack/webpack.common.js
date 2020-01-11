@@ -3,9 +3,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        sandbox: './examples/sandbox/index.js',
-        showcase: './examples/showcase/index.js'
-        
+        sandbox: './examples/sandbox/index.js'
     },
     output: {
         filename: "js/[name].bundle.js",
