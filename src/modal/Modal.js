@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import './modal.scss';
 import ModalInterface from './ModalInterface.js';
 
+/**
+- Use a modal to display extra important information.
+- The modal can take a child prop or be passed a prob called body.
+**/
+
 class Modal extends Component {
 
     constructor(props){
@@ -24,7 +29,9 @@ class Modal extends Component {
     }
 
     componentWillUnmount = () => {
-        this.modalToggleButton.removeEventListener('click', this.toggleModal); 
+        if (this.modalToggleButton) {
+          this.modalToggleButton.removeEventListener("click", this.toggleModal);
+        }
     }
 
     openModal = (resetFocusElement) => {
@@ -94,11 +101,41 @@ class Modal extends Component {
 }
 
 Modal.propTypes = {
-    toggleBtnRef: PropTypes.node,
-    maxWidth: PropTypes.number,
-    closeModale: PropTypes.func,
-    modalOpen: PropTypes.bool.isRequired,
-    elementToFocusOnClose: PropTypes.object
-}
+  /** A boolean that when set to true displays the close icon in the modals header */
+  closeButton: PropTypes.node,
+  /** sets the max width of the modal */
+  maxWidth: PropTypes.number,
+  /** sets the transition time for the modals animations */
+  transitionTime: PropTypes.number,
+  /** A boolean used to detect if the modal should be open or closed */
+  modalOpen: PropTypes.bool.isRequired,
+  /** A function passed to the modal that will change the modalOpen state value to false */
+  handleClose: PropTypes.func.isRequired,
+  /** A refrence to the button used to toggle the modal open (used to refocus on close) */
+  elementToFocusOnClose: PropTypes.object,
+  /** A string or an element to go inside the modal header */
+  header: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  /** A string or an element to go inside the modal body */
+  body: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  /** A string or an element to go inside the modal footer */
+  footer: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  /** A boolean that when true makes the modal draggable when grabbed by the header */
+  draggable: PropTypes.bool,
+  /** A boolean that when true makes it imposible to drag the modal out of the header */
+  containedInWindow: PropTypes.bool
+};
+
+Modal.defaultProps = {
+  closeButton: false,
+  maxWidth: 600,
+  transitionTime: 400,
+  modalOpen: false,
+  elementToFocusOnClose: null,
+  header: null,
+  body: null,
+  footer: null,
+  draggable: false,
+  containedInWindow: true
+};
 
 export default Modal;
