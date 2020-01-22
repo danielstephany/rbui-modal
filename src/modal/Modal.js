@@ -102,7 +102,7 @@ class Modal extends Component {
 
 Modal.propTypes = {
   /** A boolean that when set to true displays the close icon in the modals header */
-  closeButton: PropTypes.node,
+  closeButton: PropTypes.bool,
   /** sets the max width of the modal */
   maxWidth: PropTypes.number,
   /** sets the transition time for the modals animations */

@@ -11,6 +11,7 @@ export default {
   }
 };
 
+
 export const baseModal = () => (
          <Modal
            modalOpen={true}

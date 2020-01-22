@@ -6,6 +6,7 @@
 // When you add this file, we won't add the default configurations which is similar
 // to "React Create App". This only has babel loader to load JavaScript.
 const getStyleLoaders = require('./utils/getStyleLoaders');
+const path = require('path');
 
 module.exports = {
   plugins: [
@@ -35,5 +36,10 @@ module.exports = {
         )
       }
     ]
-  }
+  },
+  resolve: {
+    alias: {
+      "dsui-modal": path.resolve(__dirname, "../src")
+    }
+  },
 };

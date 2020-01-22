@@ -14,6 +14,7 @@
     transition-duration: inherit;
     will-change: opacity;
     opacity: 0;
+    z-index: 10000;
     &.draggable {
         border-radius: 4px;
         display: block;
